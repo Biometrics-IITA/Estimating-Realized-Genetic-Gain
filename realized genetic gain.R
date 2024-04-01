@@ -81,7 +81,7 @@ single.study.random <- datCleaned |>
                          )))
   )
 
-#### Filter singularities and proceed with H2
+#### Filter null and proceed with H2
 single.study.random <- single.study.random |>
   filter(!is.null(model.rando)) |>
   mutate(
