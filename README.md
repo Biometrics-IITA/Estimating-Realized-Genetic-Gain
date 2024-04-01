@@ -10,16 +10,16 @@ increased efficiency.
 
 ## The data
 
-The data [data](./data/cassava_uyt_2016_2021.csv) are from trials
-regularly conducted at IITA experiment stations and other locations
-within West Africa through collaborative efforts with partners, from
-2016 to 2021. This forms an integral component of the IITA cassava
-breeding strategy, aimed at channeling elite products into the national
-agricultural research system.
+The [data](./data) are from trials regularly conducted at IITA
+experiment stations and other locations within West Africa through
+collaborative efforts with partners, from 2016 to 2021. This forms an
+integral component of the IITA cassava breeding strategy, aimed at
+channeling elite products into the national agricultural research
+system.
 
 ## The method
 
-The realized genetic gain [estimation](realized%20genetic%20gain.R) is
+The realized genetic gain [estimation](./realized%20genetic%20gain.R) is
 done in three steps:
 
 - Step 1: Linear mixed model (LMM) is used for single-trial analysis to
