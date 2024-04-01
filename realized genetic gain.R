@@ -94,12 +94,6 @@ single.study.random <- single.study.random |>
     model.rando = list(eval(
       parse(text = "update.asreml(model.rando)")
     )),
-    model.rando = list(eval(
-      parse(text = "update.asreml(model.rando)")
-    )),
-    model.rando = list(eval(
-      parse(text = "update.asreml(model.rando)")
-    )),
     vg = list(
       summary(model.rando)$varcomp |>
         rownames_to_column(var = "Effect") |>
