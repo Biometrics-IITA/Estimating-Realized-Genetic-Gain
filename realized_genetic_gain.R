@@ -3,7 +3,7 @@ library(asreml)
 
 ################################################################################
 ################################################################################
-#### read the data and qa/qc (remove empty reps and constant env.)
+#### read the data and qa/qc (remove empty reps and constant values)
 ################################################################################
 ################################################################################
 
@@ -17,7 +17,7 @@ length(unique(dat$geno))
 unique(dat$design)
 
 
-#### remove empty reps and constant traits
+#### remove empty reps and constant values
 datCleaned <- dat |>
   mutate(across(fyld, ~ replace(.x, is.nan(.x), NA)))  |>
   nest_by(studyName, rep) |>
