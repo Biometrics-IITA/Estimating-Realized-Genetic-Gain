@@ -1,3 +1,4 @@
+2024-04-04
 
 ## Introduction
 
@@ -19,7 +20,7 @@ system.
 
 ## The method
 
-The realized genetic gain [estimation](./realized%20genetic%20gain.R) is
+The realized genetic gain [estimation](./realized_genetic_gain.R) is
 done in three steps:
 
 - Step 1: Linear mixed model (LMM) is used for single-trial analysis to
