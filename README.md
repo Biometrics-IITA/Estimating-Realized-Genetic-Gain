@@ -5,8 +5,8 @@ Estimating genetic gain is crucial in plant breeding as it allows
 breeders to quantify the progress in developing new varieties with
 desirable traits. By measuring the increase in performance over
 generations, breeders can evaluate the effectiveness of their breeding
-strategies and adjust breeding strategies and logistics as necessary for
-increased efficiency.
+strategies and adjust goals and logistics as necessary for increased
+efficiency.
 
 ## The data
 
