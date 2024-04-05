@@ -243,7 +243,6 @@ if (!is.null(model.combined)) {
     last.Year.geno <-  max(blues.combined$yearCloning)
     baseline <-  intercept + first.Year.geno * slope
     gg.percent <-  100 * slope / baseline
-    rsquared <- summary(fit.regression)$r.squared
     pvalue <- summary(fit.regression)$coefficients |>
       as.data.frame() |>
       rownames_to_column("Effect") |>
