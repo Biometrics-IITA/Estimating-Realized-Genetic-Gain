@@ -168,9 +168,11 @@ dat.blues.combined <- single.study.fixed  |>
     predictions = list(
       predict.asreml(model.fixed, pworkspace = "5gb", classify = "geno")
     ),
-    blues = list(predictions$pvals |>
+    blues = list(
+      predictions$pvals |>
                    filter(!is.na(predicted.value)) |>
-                   mutate(weight = 1 / (std.error ^ 2)))
+                   mutate(weight = 1 / (std.error ^ 2))
+      )
   ) |>
   select(studyName, yearTesting, blues)  |>
   unnest(blues) |>
@@ -200,9 +202,8 @@ if (!is.null(model.combined)) {
   model.combined <- eval(parse(text = "update.asreml(model.combined)"))
   
   #### estimate combined BLUEs and weights
-  predictions.combined <-
-    predict.asreml(model.combined, pworkspace = "5gb", classify = "geno")
-  blues.combined = predictions.combined$pvals |>
+  predictions.combined <- predict.asreml(model.combined, pworkspace = "5gb", classify = "geno")
+  blues.combined <- predictions.combined$pvals |>
     mutate(weight = 1 / (std.error) ^ 2) |>
     left_join(
       dat |>
