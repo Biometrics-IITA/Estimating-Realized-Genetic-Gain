@@ -68,7 +68,8 @@ single.study.random <- datCleaned |>
                              NULL
                            }
                          )),
-                         list(tryCatch( # RCBD
+                         list(tryCatch(
+                           # RCBD
                            asreml(
                              fyld ~ rep,
                              random = ~ geno,
@@ -111,20 +112,20 @@ single.study.random <- single.study.random |>
     ),
     vd.avg = list(mean(vd.mat[upper.tri(vd.mat, diag = FALSE)])),
     H2 = list(1 - (vd.avg / (vg * 2)))
-  ) 
+  )
 
 ##################################################################################################
 ##################################################################################################
-#### STEP 2: example of a one-stage approach 
+#### STEP 2: example of a one-stage approach
 #### Run a combined Linear Mixed Model (LMM) and estimate combined BLUEs and weights
 ##################################################################################################
 ##################################################################################################
 
 #### Filter low H2 and prepare the data
-datCombined <- single.study.random |> 
-  filter(H2 >= 0.1) |> 
-  select(studyName, design, yearTesting, data) |> 
-  unnest(data) |> 
+datCombined <- single.study.random |>
+  filter(H2 >= 0.2) |>
+  select(studyName, design, yearTesting, data) |>
+  unnest(data) |>
   ungroup()
 datCombined <- droplevels(datCombined)
 
@@ -133,7 +134,7 @@ model.combined <- tryCatch(
   asreml(
     fixed = fyld ~ yearTesting + geno,
     random = ~ loc + studyName + geno:loc + geno:yearTesting + geno:studyName,
-    residual = ~dsum(~units|studyName),
+    residual = ~ dsum( ~ units | studyName),
     workspace = "3gb",
     data = datCombined
   ),
@@ -178,11 +179,9 @@ if (!is.null(model.combined)) {
   nY = length(unique(blues.combined$yearCloning))
   
   if (nY >= 5) {
-    fit.regression <- lm(
-      predicted.value ~ yearCloning,
-      weights = weight,
-      data = blues.combined
-    )
+    fit.regression <- lm(predicted.value ~ yearCloning,
+                         weights = weight,
+                         data = blues.combined)
     slope <-  fit.regression$coefficients[2]
     intercept <-  fit.regression$coefficients[1]
     first.Year.geno <-  min(blues.combined$yearCloning)
@@ -213,4 +212,3 @@ if (!is.null(model.combined)) {
   out.gg
   
 }
-
