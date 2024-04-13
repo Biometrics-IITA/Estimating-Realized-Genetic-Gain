@@ -81,7 +81,7 @@ single.study.random <- datCleaned |>
                          )))
   )
 
-#### Filter null and proceed with H2
+#### Filter null and estimate H2
 single.study.random <- single.study.random |>
   filter(!is.null(model.rando)) |>
   mutate(
@@ -111,85 +111,31 @@ single.study.random <- single.study.random |>
     ),
     vd.avg = list(mean(vd.mat[upper.tri(vd.mat, diag = FALSE)])),
     H2 = list(1 - (vd.avg / (vg * 2)))
-  ) |>
-  filter(H2 > 0.2)
+  ) 
 
 ##################################################################################################
 ##################################################################################################
-#### STEP 2: example of a two-stage approach
-####    stage 1: Linear Mixed Model (LMM) for each env. and estimate BLUEs and weights
-####    stage 2: Combined Linear Mixed and estimate combined blues and weights
+#### STEP 2: example of a one-stage approach 
+#### Run a combined Linear Mixed Model (LMM) and estimate combined BLUEs and weights
 ##################################################################################################
 ##################################################################################################
 
-######### Stage 1
-#### Run single trial analysis: geno as fixed
-single.study.fixed <- single.study.random |>
-  mutate(
-    data = list(droplevels(data)),
-    model.fixed = ifelse(design == "Alpha",
-                         list(tryCatch(
-                           asreml(
-                             fyld ~ rep + geno,
-                             random = ~ block,
-                             workspace = "3gb",
-                             data = data
-                           ),
-                           error = function(e) {
-                             NULL
-                           }
-                         )),
-                         list(tryCatch( # RCBD
-                           asreml(
-                             fyld ~ rep + geno, 
-                             workspace = "3gb", 
-                             data = data
-                             ),
-                           error = function(e) {
-                             NULL
-                           }
-                         )))
-  )
-
-
-#### Filter null and estimate BLUEs and weights
-dat.blues.combined <- single.study.fixed  |>
-  filter(!is.null(model.fixed)) |>
-  mutate(
-    model.fixed = list(eval(
-      parse(text = "update.asreml(model.fixed)")
-    )),
-    model.fixed = list(eval(
-      parse(text = "update.asreml(model.fixed)")
-    )),
-    model.fixed = list(eval(
-      parse(text = "update.asreml(model.fixed)")
-    )),
-    predictions = list(
-      predict.asreml(model.fixed, pworkspace = "5gb", classify = "geno")
-    ),
-    blues = list(
-      predictions$pvals |>
-                   filter(!is.na(predicted.value)) |>
-                   mutate(weight = 1 / (std.error ^ 2))
-      )
-  ) |>
-  select(studyName, yearTesting, blues)  |>
-  unnest(blues) |>
+#### Filter low H2 and prepare the data
+datCombined <- single.study.random |> 
+  filter(H2 >= 0.1) |> 
+  select(studyName, design, yearTesting, data) |> 
+  unnest(data) |> 
   ungroup()
+datCombined <- droplevels(datCombined)
 
-dat.blues.combined <- droplevels(dat.blues.combined)
-
-######### Stage 2
 #### Run combined trial analysis: geno as fixed
-model.combined = tryCatch(
+model.combined <- tryCatch(
   asreml(
-    fixed = predicted.value ~ yearTesting + geno,
-    random = ~ geno:yearTesting + studyName,
-    weights = weight,
-    family = asr_gaussian(dispersion = 1),
+    fixed = fyld ~ yearTesting + geno,
+    random = ~ loc + studyName + geno:loc + geno:yearTesting + geno:studyName,
+    residual = ~dsum(~units|studyName),
     workspace = "3gb",
-    data = dat.blues.combined
+    data = datCombined
   ),
   error = function(e) {
     NULL
@@ -236,7 +182,7 @@ if (!is.null(model.combined)) {
       predicted.value ~ yearCloning,
       weights = weight,
       data = blues.combined
-      )
+    )
     slope <-  fit.regression$coefficients[2]
     intercept <-  fit.regression$coefficients[1]
     first.Year.geno <-  min(blues.combined$yearCloning)
@@ -267,3 +213,4 @@ if (!is.null(model.combined)) {
   out.gg
   
 }
+

@@ -38,6 +38,5 @@ done in three steps:
 
 ## Acknowledgement
 
-The IITA West Africa cassava breeding program, in collaboration with
-NARS partners, has generated these data across 84 environments for 6
-years.
+The IITA West Africa cassava breeding program has generated these data
+across 84 environments for 6 years.
