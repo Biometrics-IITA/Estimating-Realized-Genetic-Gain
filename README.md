@@ -1,9 +1,9 @@
 
 ## Introduction
 
-Estimating genetic gain is crucial in plant breeding as it allows
-breeders to quantify the progress in developing new varieties with
-desirable traits. By measuring the increase in performance over
+Estimating realized genetic gain is crucial in plant breeding as it
+allows breeders to quantify the progress in developing new varieties
+with desirable traits. By measuring the increase in performance over
 generations, breeders can evaluate the effectiveness of their breeding
 strategies and adjust methods and logistics as necessary for increased
 efficiency.
@@ -26,12 +26,8 @@ done in three steps:
   estimate heritability for each environment. Environments with a
   heritability lower than 0.2 are discarded.
 
-- Step 2: Done using a two-stages approach:
-
-  - LMM is used to estimate BLUEs and corresponding weights for each
-    environment.
-  - Combined LMM is performed to estimate combined BLUEs and
-    corresponding weights.
+- Step 2: Combined LMM (one-stage approach) is performed to estimate
+  combined BLUEs and corresponding weights
 
 - Step 3: A weighted-linear regression of the combined BLUEs on the year
   of origin
